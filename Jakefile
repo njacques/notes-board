@@ -23,7 +23,7 @@ task('livereload', () => {
 })
 
 desc('Compile styles on file changes')
-task('concise:watch', () => {
+task('concise-watch', () => {
   jake.exec('chokidar "static/styles/**/*.scss" -c "jake concise"', {
     printStdout: true,
     printStderr: true
@@ -34,6 +34,6 @@ desc('Start the development services.')
 task('default', () => {
   jake.Task['nodemon'].invoke();
   jake.Task['concise'].invoke();
-  jake.Task['concise:watch'].invoke();
+  jake.Task['concise-watch'].invoke();
   jake.Task['livereload'].invoke();
 })
