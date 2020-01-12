@@ -1,24 +1,21 @@
 'use strict';
 
-const Hapi = require('hapi');
-const Hoek = require('hoek');
+const Hapi = require('@hapi/hapi');
 const Path = require('path');
 const Settings = require('./settings');
 const Routes = require('./lib/routes');
 const Models = require('./lib/models/');
 
-const server = new Hapi.Server();
+const init = async () => {
+  const server = new Hapi.Server({port: Settings.port});
 
-server.connection({ port: Settings.port });
-
-server.register([
-  require('vision'),
-  require('inert')
-], (err) => {
-  Hoek.assert(!err, err);
+  await server.register([
+    require('vision'),
+    require('inert')
+  ]);
 
   server.views({
-    engines: { pug: require('pug') },
+    engines: {pug: require('pug')},
     path: Path.join(__dirname, 'lib/views'),
     compileOptions: {
       pretty: false
@@ -28,11 +25,16 @@ server.register([
 
   // Add routes
   server.route(Routes);
+
+  await Models.sequelize.sync();
+
+  await server.start();
+  console.log(`Server running at: ${server.info.uri}`);
+};
+
+process.on('unhandledRejection', (err) => {
+  console.log(err);
+  process.exit(1);
 });
 
-Models.sequelize.sync().then(() => {
-  server.start((err) => {
-    Hoek.assert(!err, err);
-    console.log(`Server running at: ${server.info.uri}`);
-  });
-});
+init();
