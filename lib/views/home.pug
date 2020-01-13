@@ -6,14 +6,22 @@ block content
 
     nav
       ul
-        li: a(href='#note-form' rel='modal:open') Publish
+        li: a(href='#note-form' data-micromodal-trigger='note-modal') Publish
 
   main(container).notes-list
     each note in data.notes
       include components/note
 
-  form(action='/note' method='POST').note-form#note-form
-      p: input(name='noteTitle' type='text' placeholder='Title…')
-      p: input(name='noteDescription' type='text' placeholder='Short description…')
-      p: textarea(name='noteContent') Write here the content of the new note…
-      p._text-right: input(type='submit' value='Submit')
+  #note-modal.modal.micromodal-slide(aria-hidden='true')
+    .modal__overlay(tabindex='-1' data-micromodal-close='')
+      .modal__container(role='dialog' aria-modal='true' aria-labelledby='note-modal-title')
+        header.modal__header
+          h2#note-modal-title.modal__title
+                      | New Note
+          button.modal__close(aria-label='Close modal' data-micromodal-close='')
+        main#note-modal-content.modal__content
+          form(action='/note' method='POST').note-form#note-form
+            p: input(name='noteTitle' type='text' placeholder='Title')
+            p: input(name='noteDescription' type='text' placeholder='Short description')
+            p: textarea(name='noteContent' placeholder='Contents')
+            p._text-right: input(type='submit' value='Submit')
