@@ -1,5 +1,10 @@
 MicroModal.init();
 
+// Cancel default action on modal trigger links to avoid changing URL
+document
+    .querySelector('[data-micromodal-trigger]')
+    .addEventListener('click', e => e.preventDefault());
+
 const form = document.querySelector('#note-form');
 const url = form.getAttribute('action');
 const method = form.getAttribute('method');
@@ -30,6 +35,6 @@ form.addEventListener('submit', e => {
     body: new FormData(form)
   })
     .then(response => response.text())
-    .then(onSuccess)
+    .then(text => onSuccess(text))
     .catch(error => console.error(error));
 });
