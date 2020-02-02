@@ -1,27 +1,39 @@
 extends layout
 
 block content
-  header(container)
-    h1 Notes Board
+  section.section
+    .container
 
-    nav
-      ul
-        li: a(href='#' data-micromodal-trigger='note-modal') Publish
+      h1.title.has-text-centered
+        | Notes Board
 
-  main(container).notes-list
-    each note in data.notes
-      include components/note
+      .tabs.is-centered
+        ul
+          li
+            a.show-modal(href='#') Publish
 
-  #note-modal.modal.micromodal-slide(aria-hidden='true')
-    .modal__overlay(tabindex='-1' data-micromodal-close='')
-      .modal__container(role='dialog' aria-modal='true' aria-labelledby='note-modal-title')
-        header.modal__header
-          h2#note-modal-title.modal__title
-                      | New Note
-          button.modal__close(aria-label='Close modal' data-micromodal-close='')
-        main#note-modal-content.modal__content
-          form(action='/note' method='POST').note-form#note-form
-            p: input(name='noteTitle' type='text' placeholder='Title')
-            p: input(name='noteDescription' type='text' placeholder='Short description')
-            p: textarea(name='noteContent' placeholder='Contents')
-            p._text-right: input(type='submit' value='Submit')
+      main(container).notes-list
+        each note in data.notes
+          include components/note
+          hr
+
+      .modal
+        .modal-background
+        .modal-card
+          header.modal-card-head
+            p.modal-card-title Add note
+            button.delete(aria-label='close')
+          section.modal-card-body
+            form(action='/note' method='POST').note-form#note-form
+              .field
+                .control
+                  input.input(name='noteTitle' type='text' placeholder='Title')
+              .field
+                .control
+                  input.input(name='noteDescription' type='text' placeholder='Short description')
+              .field
+                .control
+                  textarea.textarea(name='noteContent' placeholder='Contents')
+              .field
+                .control
+                  button.button.is-link Save

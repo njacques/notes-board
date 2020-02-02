@@ -1,30 +1,36 @@
 extends layout
 
 block content
-  header(container)
-    h1 Notes Board
+  section.section
+    .container
+      h1.title.has-text-centered
+          | Notes Board
 
-    nav
-      ul
-        li: a(href='/') Home
-        li: a(href='#' data-micromodal-trigger='note-modal') Update
-        li: a(href=`/note/${note.slug}/delete`) Delete
+      .tabs.is-centered
+        ul
+          li: a(href='/') Home
+          li: a.show-modal(href='#') Update
+          li: a(href=`/note/${note.slug}/delete`) Delete
+  
+      include components/note
 
-  main(container).note-content
-    include components/note
-
-
-  #note-modal.modal.micromodal-slide(aria-hidden='true')
-    .modal__overlay(tabindex='-1' data-micromodal-close='')
-      .modal__container(role='dialog' aria-modal='true' aria-labelledby='note-modal-title')
-        header.modal__header
-          h2#note-modal-title.modal__title
-            | Edit Note
-          button.modal__close(aria-label='Close modal' data-micromodal-close='')
-        main#note-modal-content.modal__content
-          form(action=`/note/${note.slug}` method='PUT').note-form#note-form
-                p: input(name='noteTitle' type='text' value=note.title)
-                p: input(name='noteDescription' type='text' value=note.description)
-                p: textarea(name='noteContent')= note.content
-                p._text-right: input(type='submit' value='Update')
-
+      .modal
+        .modal-background
+        .modal-card
+          header.modal-card-head
+            p.modal-card-title Edit note
+            button.delete(aria-label='close')
+          section.modal-card-body
+            form(action=`/note/${note.slug}` method='PUT').note-form#note-form
+              .field
+                .control
+                  input.input(name='noteTitle' type='text' placeholder='Title' value=note.title)
+              .field
+                .control
+                  input.input(name='noteDescription' type='text' placeholder='Short description' value=note.description)
+              .field
+                .control
+                  textarea.textarea(name='noteContent' placeholder='Contents') #{note.content}
+              .field
+                .control
+                  button.button.is-link Save
