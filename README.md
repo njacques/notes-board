@@ -6,7 +6,7 @@ https://www.sitepoint.com/node-js-mvc-application
 
 ## Requirements
 
-* [Node.js](http://nodejs.org/) (v6 or higher)
+* [Node.js](http://nodejs.org/) (v8 or higher)
 
 ## Installation Steps
 
